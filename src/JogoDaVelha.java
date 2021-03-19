@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.awt.*;
+
 import static javax.swing.JOptionPane.*;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
@@ -6,7 +9,7 @@ public class JogoDaVelha {
 
     public static void main(String[] args) {
         JogoDaVelha jogoDaVelha = new JogoDaVelha();
-        jogoDaVelha.iniciarJogo();
+        jogoDaVelha.mostrarMenu();
     }
 
     void mostrarTabuleiro(char[][] tabuleiro){
@@ -194,32 +197,49 @@ public class JogoDaVelha {
     void iniciarJogo(){
         int coluna, linha;
 
-        char[][] tabuleiro = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-        tabuleiro[0][0] = ' ';
-        tabuleiro[0][1] = ' ';
-        tabuleiro[0][2] = ' ';
-        tabuleiro[1][0] = ' ';
-        tabuleiro[1][1] = ' ';
-        tabuleiro[1][2] = ' ';
-        tabuleiro[2][0] = ' ';
-        tabuleiro[2][1] = ' ';
-        tabuleiro[2][2] = ' ';
+        char[][] tabuleiro = new char[3][3];
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                tabuleiro[i][j] = ' ';
+            }
+        }
         do {
             mostrarTabuleiro(tabuleiro);
             System.out.println("Vez do jogador X");
-            coluna = Integer.parseInt(showInputDialog("Insira a posição da coluna: "));
-            linha = Integer.parseInt(showInputDialog("Insira a posição da linha: "));
+            do {
+
+                coluna = Integer.parseInt(showInputDialog(null, "Insira a posição da coluna: ", "Vez do jogador X", PLAIN_MESSAGE));
+                linha = Integer.parseInt(showInputDialog(null, "Insira a posição da linha: ", "Vez do jogador X", PLAIN_MESSAGE));
+                if ((linha < 0 || linha > 2 && coluna < 0 || coluna > 2)){
+                    showMessageDialog(null, "Coordenada inválida!", "Erro!", ERROR_MESSAGE);
+                }
+
+               else if (tabuleiro[linha][coluna] == 'x' || tabuleiro[linha][coluna] == 'o') {
+                    showMessageDialog(null, "Espaço já ocupado!", "Erro!", ERROR_MESSAGE);
+                }
+
+            }while((linha < 0 || linha > 2) && (coluna < 0 || coluna > 2) || (tabuleiro[linha][coluna] == 'x' || tabuleiro[linha][coluna] == 'o'));
             tabuleiro[linha][coluna] = 'x';
-
             checarRegrasPecaX(tabuleiro);
-
             mostrarTabuleiro(tabuleiro);
-            System.out.println("Vez do jogador O");
-            coluna = Integer.parseInt(showInputDialog("Insira a posição da coluna: "));
-            linha = Integer.parseInt(showInputDialog("Insira a posição da linha: "));
-            tabuleiro[linha][coluna] = 'o';
 
+            System.out.println("Vez do jogador O");
+            do {
+
+                coluna = Integer.parseInt(showInputDialog(null, "Insira a posição da coluna: ", "Vez do jogador O", PLAIN_MESSAGE));
+                linha = Integer.parseInt(showInputDialog(null, "Insira a posição da linha: ", "Vez do jogador O", PLAIN_MESSAGE));
+                if ((linha < 0 || linha > 2 && coluna < 0 || coluna > 2)){
+                    showMessageDialog(null, "Coordenada inválida!", "Erro!", ERROR_MESSAGE);
+                }
+                else if (tabuleiro[linha][coluna] == 'x' || tabuleiro[linha][coluna] == 'o') {
+                    showMessageDialog(null, "Espaço já ocupado!", "Erro!", ERROR_MESSAGE);
+                }
+
+            }while((linha < 0 || linha > 2) && (coluna < 0 || coluna > 2) || (tabuleiro[linha][coluna] == 'x' || tabuleiro[linha][coluna] == 'o'));
+            tabuleiro[linha][coluna] = 'o';
             checarRegrasPecaO(tabuleiro);
+            mostrarTabuleiro(tabuleiro);
         }while (true);
 
 
